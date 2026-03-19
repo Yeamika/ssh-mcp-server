@@ -1,0 +1,38 @@
+name: build-local-package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+      - local
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      - name: Pack npm package
+        run: npm pack
+
+      - name: Upload tgz artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ssh-mcp-server-tgz
+          path: fangjunjie-ssh-mcp-server-*.tgz
+          if-no-files-found: error
