@@ -7,6 +7,7 @@ on:
       - main
       - master
       - local
+      - feat/execute-command-directory
 
 jobs:
   build:
